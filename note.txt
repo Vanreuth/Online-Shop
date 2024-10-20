@@ -1,0 +1,58 @@
+Laravel project
+
+
+  Design Database:
+   1.  slides
+     - id
+     - title
+     - category
+     - image
+     - status
+   2 . categories
+     - id
+     - name
+     - image
+     - status
+   3 . brands
+     - id
+     - name
+     - category (one-to-many)
+     - status
+   4 . colors
+     - id
+     - code 
+     - name
+     - status
+   5 . products
+     - id
+     - name
+     - category(one-to-one)
+     - des
+     - price
+     - qty
+     - brands(one-to-one)
+     - color
+     - image
+     - autor
+     - status
+      
+   6 . product-img(with product)
+     - id
+     - name
+     - product_id(one-to-many)
+   7 . contact
+     - id
+     - name
+     - image
+     - status
+   8 . user
+     - id
+     - name
+     - email
+     - password
+     - role(admin,user,customer)
+    
+php artisan make:model Brand -m          // make model and migrate
+
+php artisan make:controller BrandController --resource
+
