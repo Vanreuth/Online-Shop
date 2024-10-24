@@ -74,7 +74,9 @@
                             <td>${value.id}</td>
                             <td>${value.name}</td>
                             <td>${value.email}</td>
-                            <td>${(value.role==1) ? 'Admin' : 'User'}</td>
+                             <td>
+                            ${(value.role == 1) ? '<span class="badge badge-success p-2">Admin</span>' : ' <span class="badge badge-danger  p-2">User</span>' }
+                        </td>
                             <td>
                                 ${value.img ? `<img src="{{ asset('storage/${value.img}') }}" alt="User Image" width="50">` : 'No Image'}
                             </td>

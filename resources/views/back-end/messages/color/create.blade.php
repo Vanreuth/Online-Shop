@@ -15,7 +15,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="colorCode">Color Code</label>
+                        <label for="colorCode">Color</label>
                         <input type="color" name="code" class="form-control" id="colorCode" required>
                         <p class="text-danger" id="codeError" style="display:none;"></p>
                     </div>

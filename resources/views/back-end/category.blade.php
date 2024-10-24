@@ -133,8 +133,9 @@ const ListCategory = () => {
                         <tr>
                             <td>${value.id}</td>
                             <td>${value.name}</td>
-                             <td>${(value.status==1) ? 'Active' : 'Inactive'}</td>
-                             
+                             <td>
+                            ${(value.status == 1) ? '<span class="badge badge-success p-2">Active</span>' : ' <span class="badge badge-danger  p-2">Inactive</span>' }
+                        </td>
                             <td>
                                 ${value.image ? `<img src="${imageUrl}" alt="Category Image" width="100">` : 'No Image'}
                             </td>

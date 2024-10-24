@@ -83,11 +83,24 @@ class ColorController extends Controller
     // Update a color
     public function update(Request $request)
     {
+        // Validate the incoming request data
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'code' => 'required|string|max:10',
+            'status' => 'required|in:0,1', // assuming status is a boolean or enum type (active/inactive)
+        ]);
+    
+        // Find the color by ID
         $color = Color::find($request->id);
-
+    
         if ($color) {
-            $color->update($request->all());
-
+            // Update the color with the validated data
+            $color->update([
+                'name' => $request->name,
+                'code' => $request->code,
+                'status' => $request->status,
+            ]);
+    
             return response()->json([
                 'status' => 200,
                 'message' => 'Color updated successfully',
@@ -99,6 +112,7 @@ class ColorController extends Controller
             ]);
         }
     }
+    
 
     // Delete a color
     public function destroy(Request $request)

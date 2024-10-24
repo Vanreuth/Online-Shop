@@ -78,9 +78,10 @@
                         <tr>
                             <td>${value.id}</td>
                             <td>${value.name}</td>
-                            <td class="${(value.status == 1) ? 'text-success' : 'text-danger'}">
-                             ${(value.status == 1) ? 'Active' : 'Inactive'}
-                            </td>
+                            <td>${value.category.name}</td>
+                             <td>
+                            ${(value.status == 1) ? '<span class="badge badge-success p-2">Active</span>' : ' <span class="badge badge-danger  p-2">Inactive</span>' }
+                        </td>
                             <td>
                                 <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditBrand" onclick="editBrand(${value.id})">Edit</button>
                                 <button class="btn btn-danger btn-sm" onclick="BrandDelete(${value.id})">Delete</button>
@@ -191,12 +192,12 @@
                 dataType: "json",
                 success: function(response) {
                     if (response.status == 200) {
-                        console.log(response.brand);
+                    
 
                         $('#brandId').val(response.brand.id);
                         $('#brand_name').val(response.brand.name);
                         $('#brand_category').val(response.brand
-                            .category_id); // Assuming a dropdown is already populated
+                            .category_id); 
                         $('#brand_status').val(response.brand.status); // Show the modal with populated data
                     } else {
                         alert('Brand not found');
@@ -243,7 +244,7 @@
                     if (response.status == 200) {
                         $('#modalEditBrand').modal('hide');
                         $(form).trigger('reset');
-                        ListBrand(); // Reload the brand list after successful update
+                        ListBrand();
                         Message(response.message);
                     } else {
                         alert(response.message);
