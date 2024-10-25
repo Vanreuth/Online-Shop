@@ -41,11 +41,6 @@
                     </tbody>
                 </table>
 
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                    <div class="show-page"></div>
-                    <button onclick="ColorRefresh()" class="btn btn-outline-danger rounded-0 btn-sm">Refresh</button>
-                </div>
-
                 <!-- Pagination -->
                 <div class="mt-3" id="paginationContainer"></div>
             </div>
@@ -167,6 +162,7 @@
             success: function(response) {
                 if (response.status === 200) {
                     $('#modalCreateColor').modal('hide');
+                    $('#createColorForm').trigger("reset");
                     ColorRefresh();
                     Message(response.message);
                 } else {

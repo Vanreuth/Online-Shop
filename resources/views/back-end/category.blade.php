@@ -84,10 +84,6 @@ const UploadImage = (form) => {
             } else {
                 console.error('Failed to upload image:', response.message);
             }
-        },
-        error: function(xhr, status, error) {
-            console.error('Upload error:', error);
-            alert('An error occurred while uploading the image');
         }
     });
 };

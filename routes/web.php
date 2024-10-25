@@ -7,6 +7,8 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ColorController;
 
 // user
+Route::post('/user/upload', [CategoryController::class, 'upload'])->name('user.upload');
+Route::post('/user/cancle', [CategoryController::class, 'cancle'])->name('user.cancle');
 Route::get('/user', [UserController::class, 'index'])->name('user.index');
 Route::post('/user/list', [UserController::class, 'list'])->name('user.list');
 Route::get('/user/show/{id}', [UserController::class, 'show'])->name('user.show');

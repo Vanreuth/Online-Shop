@@ -17,6 +17,25 @@ class UserController extends Controller
         return view('back-end.user', compact('users'));
     }
 
+    public function upload(Request $request)
+    {
+        $request->validate([
+            'img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($request->hasFile('img')) {
+            $file = $request->file('img');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/temp'), $filename,'public');
+            return response()->json([
+                'status' => 200, 
+                'img' => $filename,
+            ]);
+        }
+
+        return response()->json(['status' => 400, 'message' => 'Failed to upload image']);
+    }
+
     // Show a specific user by ID
     public function show($id)
     {
@@ -31,36 +50,36 @@ class UserController extends Controller
     // Store a new user in the database
     public function store(Request $request)
     {
-        // Validate the incoming request data
-        $validator = Validator::make($request->all(), [
+        // Validate request data
+        $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
-            'row' => 'required|integer|in:0,1',
-            'img' => 'required|image|max:2048', // Validate the row field
+            'row' => 'required|boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image is nullable
         ]);
-        $filePath = $request->file('img')->store('uploads', 'public');
-        // Check if validation fails
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+    
+        // Check if image is uploaded and process it
+        $filename = null; // Initialize filename as null
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/user'), $filename);
         }
-
-        // Create a new user with the validated data
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'row' => $request->row,
-            'img' => $filePath, // Ensure to use the correct field name
-        ]);
-        if ($user) {
-
-            return response()->json(['message' => 'User created successfully', 'user' => $user], 201);
-        } else {
-            // Return an error response
-            return response()->json(['error' => 'Failed to create user'], 500);
-        }
+    
+        // Create a new user
+        $user = new User();
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = bcrypt($request->input('password'));
+        $user->row = $request->input('row');
+        $user->img = $filename; // Save the image file name (or null if no image was uploaded)
+        $user->save();
+    
+        return response()->json(['status' => 200, 'message' => 'User created successfully']);
     }
+    
+
 
     public function list(Request $request)
 {

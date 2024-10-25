@@ -27,7 +27,7 @@ class CategoryController extends Controller
     if ($request->hasFile('image')) {
         $file = $request->file('image');
         $filename = time() . '_' . $file->getClientOriginalName();
-        $file->move('uploads/temp', $filename, 'public'); // Ensure 'public' disk is set in config/filesystems.php
+        $file->move(public_path('uploads/temp'), $filename, 'public'); // Ensure 'public' disk is set in config/filesystems.php
 
         return response()->json([
             'status' => 200,

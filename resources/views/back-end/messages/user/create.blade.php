@@ -34,13 +34,12 @@
                         <p></p>
                     </div>
                     <div class="form-group">
-                        <label for="img">Image</label>
-                        <input type="file" name="img" id="img" class="form-control">
-                        @error('img')
-                          <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
+                        <label>Image</label>
+                        <input type="file" name="image" id="image" class="form-control">
+                        <button type="button" onclick="UplaodImage('#createUserForm')" class="btn btn_upload btn-success rounded-0">Upload</button>
                         <p></p>
-                      </div>
+                    </div>
+                    <div id="image-preview" class="mt-3"></div>
                 </form>
             </div>
             <div class="modal-footer">
