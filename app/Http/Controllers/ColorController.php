@@ -26,7 +26,7 @@ class ColorController extends Controller
         }
 
         // Pagination
-        $colors = $query->paginate(5);
+        $colors = $query->paginate(10);
 
         return response()->json([
             'status' => 200,

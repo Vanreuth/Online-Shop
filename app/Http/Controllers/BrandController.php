@@ -27,7 +27,7 @@ class BrandController extends Controller
         }
 
         // Pagination
-        $brand = $query->paginate(5);
+        $brand = $query->paginate(10);
 
         return response()->json([
             'status' => 200,

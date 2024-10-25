@@ -123,18 +123,9 @@
                     } else {
                         alert('Failed to fetch users');
                     }
-                },
-                error: function(xhr, status, error) {
-                    console.error(error);
-                    alert('An error occurred while fetching users');
                 }
             });
         };
-
-
-        ListUser();
-
-
         const SaveUser = (form) => {
             let payloads = new FormData($(form)[0]);
 
@@ -148,7 +139,7 @@
                 success: function(response) {
                     if (response.status == 200) {
                         $('#modalCreateUser').modal('hide');
-                        $('#userForm').trigger("reset");
+                        $('#createUserForm').trigger("reset");
                         ListUser(); // Refresh user list
                         Message('User created successfully!'); // Use the Message function here
                     } else {
@@ -163,23 +154,26 @@
         const deleteUser = (id) => {
             if (confirm("Are you sure you want to delete this user?")) {
                 $.ajax({
-                    type: 'POST', // Use DELETE method for deleting a resource
-                    url: `{{ route('user.destroy', '') }}/${id}`, // Correct way to concatenate URL
+                    type: 'POST', 
+                    url: "{{ route('user.destroy') }}",
+                    data: {
+                        "id": id
+                    },
                     datatype: "json",
                     success: function(response) {
                         if (response.status == 200) {
-                            ListUser(); // Refresh user list after deletion
-                            Message('User deleted successfully!'); // Show success message
-                        } else {
-                            Message('Failed to delete user');
+                            Message(response.message);
+                            ListUser();
+                            Message(response.message);
                         }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(error);
-                        Message('An error occurred while deleting the user');
+                        else{
+                            Message(response.message);
+                        }
                     }
                 });
             }
         };
+
+        ListUser();
     </script>
 @endsection

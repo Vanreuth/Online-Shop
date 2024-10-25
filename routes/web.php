@@ -1,12 +1,21 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ColorController;
 
-// user
+//Auth
+
+//Route with perfix auth
+Route::prefix('admin')->group(function () {
+    Route::get('/', [AuthController::class, 'login'])->name('auth.index');
+    Route::post('/login', [AuthController::class, 'authenticate'])->name('auth.authenticate');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+
+    // user
 Route::post('/user/upload', [CategoryController::class, 'upload'])->name('user.upload');
 Route::post('/user/cancle', [CategoryController::class, 'cancle'])->name('user.cancle');
 Route::get('/user', [UserController::class, 'index'])->name('user.index');
@@ -14,7 +23,7 @@ Route::post('/user/list', [UserController::class, 'list'])->name('user.list');
 Route::get('/user/show/{id}', [UserController::class, 'show'])->name('user.show');
 Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
 Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
-Route::post('/user/destory/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+Route::post('/user/destory', [UserController::class, 'destroy'])->name('user.destroy');
 
 // Category
 Route::post('/category/upload', [CategoryController::class, 'upload'])->name('category.upload');
@@ -42,3 +51,7 @@ Route::post("/color/store",[ColorController::class,'store'])->name("color.store"
 Route::post("/color/edit",[ColorController::class,'edit'])->name("color.edit");
 Route::post("/color/update",[ColorController::class,'update'])->name("color.update");
 Route::post("/color/destroy",[ColorController::class,'destroy'])->name("color.destroy");
+    
+});
+
+

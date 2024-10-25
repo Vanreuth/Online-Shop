@@ -3,12 +3,14 @@
       <li class="nav-item nav-profile">
         <a href="#" class="nav-link">
           <div class="profile-image">
-            <img class="img-xs rounded-circle" src="back-end\assets\images\faces\face8.jpg" alt="profile image">
+            <img class="img-md rounded-circle"
+            src="{{ Auth::user()->img ? asset('uploads/user/' . Auth::user()->img) : asset('back-end/assets/images/faces/face8.jpg') }}"
+            alt="Profile image" style="width: 35px; height: 35px; object-fit: center;">
             <div class="dot-indicator bg-success"></div>
           </div>
           <div class="text-wrapper">
-            <p class="profile-name">Allen Moreno</p>
-            <p class="designation">Premium user</p>
+            <p class="profile-name">{{ Auth::user()->name , "no name" }}</p>
+            <p class="designation">{{ (Auth::user()->row==1) ? "Administrator" :"Permium User" , "no role" }}</p>
           </div>
         </a>
       </li>

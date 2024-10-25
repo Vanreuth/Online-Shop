@@ -38,6 +38,7 @@
                             <th>Brand ID</th>
                             <th>Name</th>
                             <th>Category</th>
+                            <th>CategoryImg</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -79,6 +80,9 @@
                             <td>${value.id}</td>
                             <td>${value.name}</td>
                             <td>${value.category.name}</td>
+                            <td>
+                                ${value.category.image ? `<img src="{{ asset('uploads/category/${value.category.image}') }}" alt="User Image" width="50">` : 'No Image'}
+                            </td>
                              <td>
                             ${(value.status == 1) ? '<span class="badge badge-success p-2">Active</span>' : ' <span class="badge badge-danger  p-2">Inactive</span>' }
                         </td>
