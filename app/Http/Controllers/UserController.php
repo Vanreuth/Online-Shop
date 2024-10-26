@@ -55,7 +55,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
-            'row' => 'required|boolean',
+            'role' => 'required|boolean',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image is nullable
         ]);
     
@@ -72,7 +72,7 @@ class UserController extends Controller
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->password = bcrypt($request->input('password'));
-        $user->row = $request->input('row');
+        $user->role = $request->input('role');
         $user->img = $filename; // Save the image file name (or null if no image was uploaded)
         $user->save();
     

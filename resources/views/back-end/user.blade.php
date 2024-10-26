@@ -4,19 +4,7 @@
     <div class="row page-title-header">
         <div class="col-12">
             <div class="page-header">
-                <h4 class="page-title">Dashboard</h4>
-                <div class="quick-link-wrapper w-100 d-md-flex flex-md-wrap">
-                    <ul class="quick-links">
-                        <li><a href="#">ICE Market data</a></li>
-                        <li><a href="#">Own analysis</a></li>
-                        <li><a href="#">Historic market data</a></li>
-                    </ul>
-                    <ul class="quick-links ml-auto">
-                        <li><a href="#">Settings</a></li>
-                        <li><a href="#">Analytics</a></li>
-                        <li><a href="#">Watchlist</a></li>
-                    </ul>
-                </div>
+                <h4 class="page-title">User Manegement</h4>
             </div>
         </div>
     </div>
@@ -107,7 +95,7 @@
                                 ${value.img ? `<img src="{{ asset('uploads/user/${value.img}') }}" alt="User Image" width="100">` : 'No Image'}
                             </td>
                            <td>
-                             ${value.row == 1 ? '<span class="badge badge-success p-2">Admin</span>' : '<span class="badge badge-danger p-2">User</span>'}
+                             ${value.role == 1 ? '<span class="badge badge-success p-2">Admin</span>' : '<span class="badge badge-danger p-2">User</span>'}
                 </td>
 
                             <td>

@@ -10,7 +10,12 @@ class AuthController extends Controller
 {
     public function login(){
         if(Auth::check()){
-            return redirect()->route('category.index');
+            if (Auth::user()->role == 1) {
+                return redirect()->route('dashboard.index')->with('success', 'Login successfully!');
+            } else {
+                return redirect()->route('category.index');
+            }
+            
         }
         return view('back-end.login');
     }
@@ -27,7 +32,12 @@ class AuthController extends Controller
         if($validator->passes()){
             $credentials = $request->only('email', 'password');
             if(Auth::attempt($credentials)){
-                return redirect()->route('category.index')->with('suscess', 'Login successfully!');
+                if(Auth::user()->role == 1){
+                    return redirect()->route('dashboard.index')->with('suscess', 'Login successfully!');
+                }else{
+                    return redirect()->route('category.index');
+                }
+
             }else{
                 return redirect()->back()->with(['error' => 'Email or password is incorrect']);
             }   
