@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Container\Attributes\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -34,6 +35,27 @@ class UserController extends Controller
         }
 
         return response()->json(['status' => 400, 'message' => 'Failed to upload image']);
+    }
+    public function cancel(Request $request)
+    {
+        // Check if the image path is provided
+        if ($request->has('image')) {
+            // Get the image path from the request (just the filename)
+            $imagePath = public_path('uploads/temp/' . $request->img);
+    
+            // Check if the file exists in the directory
+            if (File::exists($imagePath)) {
+                // Use unlink() or File::delete() to remove the image
+                File::delete($imagePath);
+    
+                return response()->json(['status' => 200, 'message' => 'Image deleted successfully']);
+            } else {
+                return response()->json(['status' => 404, 'message' => 'Image not found']);
+            }
+        }
+    
+        // Return an error if no image was provided in the request
+        return response()->json(['status' => 400, 'message' => 'No image provided']);
     }
 
     // Show a specific user by ID

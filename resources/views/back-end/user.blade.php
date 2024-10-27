@@ -63,6 +63,9 @@
                 <input type="hidden" name="image" value="${response.image}">
                 <div class="uploaded-image-wrapper" style="position: relative; display: inline-block; width: 300px;">
                     <img src="{{ asset('uploads/temp/${response.image}') }}" alt="Uploaded Image" class="img-thumbnail">
+                    <button type="button" class="btn btn-danger btn-sm clear-button" style="position: absolute; top: 10px; right: 10px; z-index: 1;" onclick="CancelImage('${response.image}')">
+                    Cancle
+                   </button>
                 </div>
                 `;
                         $('#image-preview').html(image);
@@ -73,6 +76,30 @@
 
                 }
             });
+        }
+        const CancelImage = (img) => {
+            if (confirm("Do you want to cancel the image?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('user.cancel') }}",
+                    data: {
+                        "image": img
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.status === 200) {
+                            $('#image-preview').html("");
+                            Message('Image canceled successfully!');
+                        } else {
+                            Message('Failed to cancel the image');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                        Message('An error occurred while canceling the image');
+                    }
+                });
+            }
         }
 
         const ListUser = () => {
