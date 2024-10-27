@@ -51,5 +51,11 @@
               <span class="menu-title">Color</span>
           </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('product.index') }}">
+            <i class="menu-icon typcn typcn-document-add"></i>
+            <span class="menu-title">Product</span>
+        </a>
+    </li>
   </ul>
 </nav>

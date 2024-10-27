@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProductController;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\DashboardMiddleware;
 
@@ -16,6 +17,9 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware(AuthMiddleware::class)->group(function () {
         // Logout
+        // User profile routes
+        Route::get('/profile/edit', [UserController::class, 'editProfile'])->name('user.editProfile');
+        Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('user.updateProfile');
         Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
         // Dashboard role
@@ -59,5 +63,17 @@ Route::prefix('admin')->group(function () {
         Route::post("/color/edit", [ColorController::class, 'edit'])->name("color.edit");
         Route::post("/color/update", [ColorController::class, 'update'])->name("color.update");
         Route::post("/color/destroy", [ColorController::class, 'destroy'])->name("color.destroy");
+
+        // Produxt routes
+        Route::post("/product/upload", [CategoryController::class, 'upload'])->name('product.upload');
+        Route::post("/product/cancel", [CategoryController::class, 'cancel'])->name('product.cancel'); // Corrected 'cancle'
+        Route::get("/product", [ProductController::class, 'index'])->name("product.index");
+        Route::post("/product/list", [ProductController::class, 'list'])->name("product.list");
+        Route::post("/product/store", [ProductController::class, 'store'])->name("product.store");
+        Route::post("/product/edit", [ProductController::class, 'edit'])->name("product.edit");
+        Route::post("/product/update", [ProductController::class, 'update'])->name("product.update");
+        Route::post("/product/destroy", [ProductController::class, 'destroy'])->name("product.destroy");
+
+
     });
 });

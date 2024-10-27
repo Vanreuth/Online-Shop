@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            // Rename the 'row' column to 'role'
-            $table->renameColumn('row', 'role');
+        Schema::create('product_imgs', function (Blueprint $table) {
+            $table->id();
+            $table->string('image');
+            $table->foreignId('product_id')->references('id')->on('products')->cascadeOnDelete();
+            $table->timestamps();
         });
     }
 
@@ -22,9 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            // Rename back if rolling back
-            $table->renameColumn('role', 'row');
-        });
+        Schema::dropIfExists('product_imgs');
     }
 };
