@@ -140,10 +140,6 @@
                         alert('Failed to fetch categories');
                     }
                 },
-                error: function(xhr, status, error) {
-                    console.error(error);
-                    alert('An error occurred while fetching categories');
-                }
             });
         };
 

@@ -8,40 +8,41 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    public function login(){
-        if(Auth::check()){
+    public function login()
+    {
+        if (Auth::check()) {
             if (Auth::user()->role == 1) {
                 return redirect()->route('dashboard.index')->with('success', 'Login successfully!');
             } else {
                 return redirect()->route('category.index');
             }
-            
         }
         return view('back-end.login');
     }
-    public function logout(){
+    public function logout()
+    {
         Auth::logout();
         return redirect()->route('auth.index');
     }
 
-    public function authenticate(Request $request){
-        $validator = Validator::make($request->all(),[
+    public function authenticate(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|min:6'
         ]);
-        if($validator->passes()){
+        if ($validator->passes()) {
             $credentials = $request->only('email', 'password');
-            if(Auth::attempt($credentials)){
-                if(Auth::user()->role == 1){
+            if (Auth::attempt($credentials)) {
+                if (Auth::user()->role == 1) {
                     return redirect()->route('dashboard.index')->with('suscess', 'Login successfully!');
-                }else{
+                } else {
                     return redirect()->route('category.index');
                 }
-
-            }else{
+            } else {
                 return redirect()->back()->with(['error' => 'Email or password is incorrect']);
-            }   
-        }else{
+            }
+        } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }
     }

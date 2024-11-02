@@ -65,8 +65,8 @@ Route::prefix('admin')->group(function () {
         Route::post("/color/destroy", [ColorController::class, 'destroy'])->name("color.destroy");
 
         // Produxt routes
-        Route::post("/product/upload", [CategoryController::class, 'upload'])->name('product.upload');
-        Route::post("/product/cancel", [CategoryController::class, 'cancel'])->name('product.cancel'); // Corrected 'cancle'
+        Route::post("/product/upload", [ProductController::class, 'upload'])->name('product.upload');
+        Route::post("/product/cancel", [ProductController::class, 'cancel'])->name('product.cancel'); // Corrected 'cancle'
         Route::get("/product", [ProductController::class, 'index'])->name("product.index");
         Route::post("/product/list", [ProductController::class, 'list'])->name("product.list");
         Route::post("/product/store", [ProductController::class, 'store'])->name("product.store");

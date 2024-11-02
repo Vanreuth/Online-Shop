@@ -2,7 +2,7 @@
     <div class="modal-dialog" style="max-width: 80%;"> 
       <div class="modal-content"> 
         <div class="modal-header"> 
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Creatting User</h1> 
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Create Product</h1> 
         </div> 
         <div class="modal-body"> 
             <form id="createProductForm" class="createProductForm" method="POST"> 
@@ -34,12 +34,10 @@
                         <div class="form-group"> 
                             <label for="">Product Image</label> 
                             <input type="file" id="image" class="image form-control" multiple name="image[]" required> 
-                            <button type="button" onclick="UploadImage('.formCreateUser')" class=" btn btn-primary upload_images">Uploads</button> 
+                            <button type="button" onclick="UploadImage('.createProductForm')" class=" btn btn-primary upload_images">Uploads</button> 
                         </div>
                         
-                        <div class="show-images row">
-                          
-                        </div>
+                        <div id="image-preview" class="mt-3"></div>
      
                     </div> 
  
