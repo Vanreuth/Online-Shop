@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string("name");
-            $table->foreignId("category_id")->references('id')->on('categories')->cascadeOnDelete();
-            $table->text("des")->nullable();
-            $table->float('price');
+            $table->string('name');
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();  // Simplified foreign key definition
+            $table->text('des')->nullable();
+            $table->decimal('price', 10, 2); // Use decimal for more precise financial data
             $table->integer('qty');
-            $table->foreignId("brand_id")->references('id')->on('brands')->cascadeOnDelete();
-            $table->string('color');
-            $table->foreignId("user_id")->references('id')->on('users')->cascadeOnDelete();
-            $table->enum('status',[1,0])->default(1);
+            $table->foreignId('brand_id')->constrained()->cascadeOnDelete();  // Simplified foreign key definition
+            $table->string('color'); // Store color as comma-separated values
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();  // Simplified foreign key definition
+            $table->boolean('status')->default(1); // Use boolean instead of enum for status
             $table->timestamps();
         });
     }

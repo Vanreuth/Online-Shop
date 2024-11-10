@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
+use App\Models\ProductImg;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -79,7 +85,93 @@ class ProductController extends Controller
     
     public function store(Request $request)
     {
-        
+        $validator = Validator::make($request->all(),[
+            'name' => 'required',
+            'price' => 'required|numeric',
+            'qty'  => 'required|numeric',
+
+        ]);
+
+        if($validator->passes()){
+            //save Product to table in db
+            $product = new Product();
+            $product->name = $request->name;
+            $product->des = $request->des;
+            $product->price = $request->price;
+            $product->qty  = $request->qty;
+            $product->category_id = $request->category_id;
+            $product->brand_id = $request->brand_id;
+            $product->color   = implode(",",$request->color);  
+            //[4,3,2] => "4,3,2"
+            $product->user_id = Auth::user()->id;
+            $product->status = $request->status;
+
+            $product->save();
+
+            if (is_array($request->color)) {
+                $product->color = implode(",", $request->color);
+            } else {
+                // Handle the case where $request->color is not an array (you can set it to an empty string or handle it as needed)
+                $product->color = "";
+            }
+            //Save to images table in db
+            if($request->image_uploads != null){
+                $images = $request->image_uploads;
+                foreach($images as $img){
+                    $image = new ProductImg();
+                    $image->image  = $img;
+                    $image->product_id = $product->id;
+
+                    //move image to product directory 
+                    if(File::exists(public_path("uploads/temp/$img"))){
+
+                         //copy
+                         File::copy(public_path("uploads/temp/$img"),public_path("uploads/product/$img"));
+
+                         //delete from temp directory
+                         File::delete(public_path("uploads/temp/$img"));
+ 
+                    }
+
+                    $image->save();
+                }
+            }
+
+            
+            return response([
+                'status' => 200,
+                'message' => "Product created successfully",
+            ]);
+
+        }else{
+            return response()->json([
+                'status' => 500,
+                'message' => 'Validation Failed',
+                'errors' => $validator->errors()
+            ]);
+        }
+    }
+    
+
+    public function data(Request $request){
+        $category = Category::orderBy('id', 'DESC')->get();
+        $brand = Brand::orderBy('id', 'DESC')->get();
+        $color = Color::orderBy('id', 'DESC')->get();
+        $relatedProducts = Product::where('status', 1)->orderBy('id', 'DESC')->get();
+        return response()->json([
+            'status' => 200,
+            'message' => 'Data received successfully',
+            'category' => $category,
+            'brand' => $brand,
+            'color' => $color,
+            'relatedProducts' => $relatedProducts,
+        ]);
+
+
+
+
+
+
     }
 
     /**
@@ -90,12 +182,24 @@ class ProductController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Request $request)
     {
-        //
+        $product = Product::find($request->id);
+        $productImg = ProductImg::where('product_id',$request->id)->get();
+        $brands  = Brand::orderBy('id','DESC')->get();
+        $categories = Category::orderBy('id','DESC')->get();
+        $colors  = Color::orderBy('id','DESC')->get();
+
+        return response([
+            'status' => 200,
+            'data'  => [
+                'product' => $product,
+                'productImages' => $productImg,
+                'brands' => $brands,
+                'categories' => $categories,
+                'colors' => $colors,
+            ]
+        ]);
     }
 
     /**

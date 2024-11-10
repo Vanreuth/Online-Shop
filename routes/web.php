@@ -73,6 +73,7 @@ Route::prefix('admin')->group(function () {
         Route::post("/product/edit", [ProductController::class, 'edit'])->name("product.edit");
         Route::post("/product/update", [ProductController::class, 'update'])->name("product.update");
         Route::post("/product/destroy", [ProductController::class, 'destroy'])->name("product.destroy");
+        Route::post("/product/date", [ProductController::class, 'data'])->name("product.data"); 
 
 
     });

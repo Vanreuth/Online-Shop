@@ -24,7 +24,8 @@
                         </div>
                         <button onclick="ProductRefresh()" class="btn btn-outline-danger rounded-0 btn-sm">Refresh</button>
                     </div>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateProduct">New
+                    <button class="btn btn-primary" onclick="handelClickProduct()" data-bs-toggle="modal"
+                        data-bs-target="#modalCreateProduct">New
                         Product</button>
                 </div>
 
@@ -57,6 +58,34 @@
 
 @section('scripts')
     <script>
+        $(document).ready(function() {
+            $('.color-add').select2({
+                placeholder: 'Select options',
+                allowClear: true,
+                tags: true,
+            });
+        });
+        $(document).ready(function() {
+            $('.color-add').select2({
+                placeholder: 'Select options',
+                allowClear: true,
+                tags: true,
+            });
+        });
+        $(document).ready(function() {
+            $('.category-add').select2({
+                placeholder: 'Select options',
+                allowClear: true,
+                tags: true,
+            });
+        });
+        $(document).ready(function() {
+            $('.brand-add').select2({
+                placeholder: 'Select options',
+                allowClear: true,
+                tags: true,
+            });
+        });
         const ListProduct = (page = 1, search = '') => {
             $.ajax({
                 type: 'POST',
@@ -90,7 +119,7 @@
                                 ${(value.status == 1) ? '<span class="badge badge-success p-2">Active</span>' : '<span class="badge badge-danger p-2">Inactive</span>'}
                             </td>
                             <td>
-                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditProduct" onclick="editProduct(${value.id})">Edit</button>
+                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalUpdateProduct" onclick="editProduct(${value.id})">Edit</button>
                                 <button class="btn btn-danger btn-sm" onclick="ProductDelete(${value.id})">Delete</button>
                             </td>
                         </tr>
@@ -152,8 +181,8 @@
                 success: function(response) {
                     if (response.status === 200) {
                         let images = response
-                        .image; 
-                        let img = ''; 
+                            .image;
+                        let img = '';
                         $.each(images, function(key, value) {
                             img += `
                 <input type="hidden" name="image[]" value="${value}">
@@ -194,9 +223,194 @@
                 });
             }
         }
+
+        const handelClickProduct = () => {
+            $.ajax({
+                type: "POST",
+                url: "{{ route('product.data') }}",
+                dataType: "json",
+                success: function(response) {
+                    if (response.status == 200) {
+                        console.log(response);
+                        
+                        // category
+                        let category = response.category;
+
+                        $.each(category, function(key, value) {
+                            let option = `
+                                <option value="${value.id}">${value.name}</option>
+                            `;
+                            $('.category-add').append(option);
+
+                        });
+
+                        // Brand
+
+                        let brand = response.brand;
+                        $.each(brand, function(key, value) {
+                            let option = `
+                                <option value="${value.id}">${value.name}</option>
+                            `;
+                            $('.brand-add').append(option);
+                        });
+
+
+                        // color
+
+                        let color = response.color;
+                        $.each(color, function(key, value) {
+                            let option = `
+                                <option value="${value.id}">${value.name}</option>
+                            `;
+                            $('.color-add').append(option);
+                        });
+
+                        let relatedProduct = response.relatedProducts;
+                        $.each(relatedProduct, function(key, value) {
+                            let option = `
+                                <option value="${value.id}">${value.name}</option>
+                            `;
+                            $('.related-add').append(option);
+                        });
+
+
+                    }
+
+
+
+                }
+            });
+
+        }
+
+        const StoreProduct = (form) => {
+            let payloads = new FormData($(form)[0]);
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('product.store') }}",
+                data: payloads,
+                datatype: "json",
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.status == 200) {
+                        $('#modalCreateProduct').modal('hide');
+                        $('#createProductForm').trigger("reset");
+                        ListProduct(); // Refresh product list
+                        Message('Product created successfully!'); // Use the Message function here
+                    } else {
+                        Message("Failed to create product",
+                        true); // Use the Message function here for failure
+                        if (response.errors) {
+                            if (response.errors.title) {
+                                $("input[name='title']").addClass("is-invalid").siblings("p").addClass(
+                                    "text-danger").text(response.errors.title[0]);
+                            }
+                            if (response.errors.price) {
+                                $("input[name='price']").addClass("is-invalid").siblings("p").addClass(
+                                    "text-danger").text(response.errors.price[0]);
+                            }
+                           
+                        }
+                    }
+                }
+            });
+
+
+        }
+        
+        const editProduct = (id) => {
+       $.ajax({
+        type: "POST",
+        url: "{{ route('product.edit') }}",
+        data: {
+          'id' : id
+        },
+        dataType: "json",
+        success: function (response) {
+          if(response.status == 200){
+           $('#name').val(response.data.product.name);
+           $('#des').val(response.data.product.des);
+           $('#price').val(response.data.product.price);
+           $('#qty').val(response.data.product.qty);
+           
+             
+            //categories start
+            let categories = response.data.categories;
+            let cate_option = ``;
+            $.each(categories, function (key, value) { 
+              cate_option += `
+              <option value="${value.id}" ${(value.id == response.data.product.category_id) ? 'selected' : ''}>
+                ${value.name}
+              </option>
+              `;
+            });
+
+            //inner to category edit 
+            $('.category_edit').html(cate_option);
+            //categories end
+          }
+
+          //brands start
+          let brands = response.data.brands;
+          let brand_option = ``;
+          $.each(brands, function (key, value) { 
+              brand_option += `
+              <option value="${value.id}" ${(value.id == response.data.product.brand_id)? 'selected' : ''}>
+                ${value.name}
+              </option>
+              `;
+          }); 
+          //inner to brand edit 
+          $('.brand_edit').html(brand_option);
+          //brands end
+
+
+          //colors start
+          let colors = response.data.colors;
+          let color_ids = response.data.product.color; // 4,2,1
+         
+          //let find  = array.includes(5)  // => true or false => 1
+          let color_option = ``;
+          $.each(colors, function (key, value) { 
+              if(color_ids.includes(String(value.id))){
+                color_option += `
+                   <option value="${value.id}" selected >${value.name}</option>
+                `;
+              }else{
+                color_option += `
+                  <option value="${value.id}">${value.name}</option>
+                `;
+              }
+          }); 
+          //inner to color edit 
+          $('.color_edit').html(color_option);
+          //colors end
+
+
+          //Images start
+          let images = response.data.productImg;
+          let img = ``;
+          $.each(images, function (key, value) { 
+               img = `
+                 <div class="col-lg-4 col-md-6 col-12 mb-3">
+                     <input type="hidden" name="image_uploads[]" value="${value.image}">
+                     <img class="w-100" src="{{ asset('uploads/product/${value.image}') }}">
+                     <button onclick="ProductCancelImage(this,'${value.image}')" type="button" class="btn btn-danger btn-sm ">cancel</button>
+                 </div>
+               `
+             $('.show-images-edit').append(img)
+          });
+
+          //Images end
+
+
+        }
+       });
+    }
+
+
+
         ListProduct();
-
-
-
     </script>
 @endsection

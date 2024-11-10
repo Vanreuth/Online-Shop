@@ -21,6 +21,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <!-- End Layout styles -->
     <link rel="shortcut icon" href="{{ asset('back-end/assets/images/favicon.ico') }}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
   </head>
   <body>
     <div class="container-scroller">
@@ -91,7 +92,7 @@
       });
 
 
-      const Message = (message) => {
+      const Message = (message, isError = false) => {
     Toastify({
       text: `${message}`,
       duration: 2000,
@@ -102,12 +103,18 @@
       position: "right", // `left`, `center` or `right`
       stopOnFocus: true, // Prevents dismissing of toast on hover
       style: {
-        background: "linear-gradient(to right, #00b09b, #96c93d)",
+        background: isError 
+            ? "linear-gradient(to right, #e74c3c, #c0392b)" // Red gradient for error
+            : "linear-gradient(to right, #00b09b, #96c93d)", // Green gradient for success
       },
       onClick: function() {} // Callback after click
     }).showToast();
+
   }
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+   
     
     @yield('scripts')
   </body>

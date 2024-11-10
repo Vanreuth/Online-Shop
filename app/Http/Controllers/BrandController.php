@@ -13,8 +13,6 @@ class BrandController extends Controller
         $categories = Category::orderBy("id","DESC")->get();
         return view('back-end.brand',compact('categories'));
         
-
-        
     }
 
     public function list(Request $request)

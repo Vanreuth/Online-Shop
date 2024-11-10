@@ -9,10 +9,7 @@ class ProductImg extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'image',
-        'product_id'
-    ];
+    protected $fillable = ['product_id', 'image'];
 
     // Define relationship with Product
     public function product()
